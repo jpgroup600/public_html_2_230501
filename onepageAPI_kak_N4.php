@@ -200,7 +200,7 @@ if (mysqli_num_rows($result) < 0) {  //if data exsists
     $encrypted = base64_encode($ciphertext);
 
 
-    $END_POINT11 = 'https://api.hyphen.im/in0076000295';
+    $END_POINT11 = 'https://api.hyphen.im/in0076000296';
     // JSON 요청 데이터
         // userType값 default 는 2 (사업자명의 인증서)
         // identitiy 값은 default로 (사업자 번호)
@@ -208,16 +208,21 @@ if (mysqli_num_rows($result) < 0) {  //if data exsists
             'loginMethod' => 'EASY',
             'loginOrgCd' => 'kakao',
             'resNm' => $userName,
-            'resNo' => '9403281233817',
+            'resNo' => '9110201567719',
             'mobileNo' => $phoneNo,
             'stepMode' => 'nostep',
-            'bizNo' => $identity,
+            'bizNo' => "9110201567719",
             'itrfCd' => '10',
             'inqrDtStrt' => $startDate,
             'inqrDtEnd' => $endDate,
             'sOption' => "N",
             'rtnCvald' => "N",
             'showCookie' => "Y",
+            'pdfYn' => "Y",
+            'payPdfYn' => "Y",
+            'sgPdfYn' => "Y",
+            'pdfPath' => "./pdf",
+            'detailYn' => "N"
         );
 
       
@@ -250,7 +255,7 @@ if (mysqli_num_rows($result) < 0) {  //if data exsists
 
             );
         
-        send_api($END_POINT10,$data10);
+        //send_api($END_POINT10,$data10);
 
         if($get_data1['result']['code'] == "CF-03002")
         {
