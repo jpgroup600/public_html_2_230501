@@ -76,10 +76,8 @@ function return_first_word($userIdentity) {  //19년생 20년생 따라 나뉘�
     // 요청 헤더 설정
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            // 'Content-Length: ' . strlen($json_data),
-            // "Authorization: Bearer ".$token,
-            "Hkey:349f51a6addcc1c2",
-            "user-id:jacob4368"
+            'Content-Length: ' . strlen($json_data),
+            "Authorization: Bearer ".$token
         ));
     // 응답 받기
         $response = urldecode(curl_exec($ch));
@@ -133,7 +131,7 @@ function return_first_word($userIdentity) {  //19년생 20년생 따라 나뉘�
     $phoneNo = $_POST['phoneNo'];
     $email = $_POST['email'];
     $userIdentity_r = $userIdentity.$userIdentity2;
-    $id = $email.$userIdentity_r."2";
+    $id = $email.$userIdentity_r."3";
 
     $userIdentity_long = return_first_word($userIdentity);
 
@@ -200,99 +198,147 @@ if (mysqli_num_rows($result) < 0) {  //if data exsists
     $encrypted = base64_encode($ciphertext);
 
 
-    $END_POINT11 = 'https://api.hyphen.im/in0076000296';
+    $END_POINT11 = 'https://development.codef.io/v1/kr/public/cw/kcomwel-employment/detail';
     // JSON 요청 데이터
         // userType값 default 는 2 (사업자명의 인증서)
         // identitiy 값은 default로 (사업자 번호)
         $data11 = array(
-            'loginMethod' => 'EASY',
-            'loginOrgCd' => 'kakao',
-            'resNm' => $userName,
-            'resNo' => $userIdentity_r,
-            'mobileNo' => $phoneNo,
-            'stepMode' => 'nostep',
-            'bizNo' => $userIdentity_r,
-            'itrfCd' => '10',
-            'inqrDtStrt' => $startDate,
-            'inqrDtEnd' => $endDate,
-            'sOption' => "N",
-            'rtnCvald' => "N",
-            'showCookie' => "Y",
-            'pdfYn' => "N",
-            'payPdfYn' => "N",
-            'sgPdfYn' => "Y",
-            'detailYn' => "N",
+            'organization' => "0001",
+            'userType' => "0",
+            'identity' => $userIdentity_r,
+            'manageNo' => $manageNo,
+            'insuranceType' => $insuranceType,
+            'userIdentity' => $userIdentity_r,
+            'userName' => $userName,
+            'loginType' => "5",
+            'loginTypeLevel' => "1",
+            'loginUserName' => $userName,
+            'phoneNo' => $phoneNo,
+            "id" => $id,
+            
 
         );
 
-      
-
-
-
-   
     
+     
+        $END_POINT2 = 'https://development.codef.io/v1/kr/public/cw/kcomwel-total-remuneration-report/list';
+
+        // JSON 요청 데이터
+            // userType값 default 는 2 (사업자명의 인증서)
+            // identitiy 값은 default로 (사업자 번호)
+            $data2 = array(
+                'organization' => "0001",
+                'userType' => "0",
+                'manageNo' => $manageNo,
+                'identity' => $userIdentity_r,
+                'year' => $year,
+                'userName' => $userName,
+                'loginType' => "5",
+                'loginTypeLevel' => "1",
+                'loginUserName' => $userName,
+                'phoneNo' => $phoneNo,
+                "id" => $id,
+               
+            
+    
+    );
         
       
 
         $get_data = send_api($END_POINT11,$data11);
+        sleep(0.7);
+        //$get_data2 = send_api($END_POINT2,$data2);
+        echo "first";
+
+        $jti = $get_data['data']['jti'];
+        $two = $get_data['data']['twoWayTimestamp'];
+        $job = $get_data['data']['jobIndex'];
+        $thread = $get_data['data']['threadIndex'];
+        $cont = $get_data['data']['continue2Way'];
+
+        $jti2 = $get_data2['data']['jti'];
+        $two2 = $get_data2['data']['twoWayTimestamp'];
+        $job2 = $get_data2['data']['jobIndex'];
+        $thread2 = $get_data2['data']['threadIndex'];
+        $cont2 = $get_data2['data']['continue2Way'];
+
+        $data11_auth = array(
+            'organization' => "0001",
+            'userType' => "0",
+            'identity' => $userIdentity_r,
+            'manageNo' => $manageNo,
+            'insuranceType' => $insuranceType,
+            'userIdentity' => $userIdentity_r,
+            'userName' => $userName,
+            'loginType' => "5",
+            'loginTypeLevel' => "1",
+            'loginUserName' => $userName,
+            'phoneNo' => $phoneNo,
+            "id" => $id,
+            'simpleAuth' => "1",
+            'is2Way' => true,
+            'twoWayInfo' => array (
+                'jobIndex' => $job,
+                'threadIndex' => $thread,
+                'jti' => $jti,
+                'twoWayTimestamp' => $two,
+                )
+            
+
+        );
+
         
-
-        echo "<div class=red>";
-        for($i =0; $i <= 5; $i++)
-        {
-            $pdfHex = $get_data['data']['list'][$i]['singoPdf'][0]['pdfHex'];
-            echo $pdfHex;
-             // Convert hexadecimal to binary
-            $pdfBinary = hex2bin($pdfHex);
-
-            // Save the binary data to a PDF file
-            $pdfFilePath = "./pdf_data/pdf_$i.pdf";
-            file_put_contents($pdfFilePath, $pdfBinary);
-            echo "</div>";
-        }
      
+        $END_POINT2 = 'https://development.codef.io/v1/kr/public/cw/kcomwel-total-remuneration-report/list';
 
-        $END_POINT10 = 'https://api.hyphen.im/in0076000302';
         // JSON 요청 데이터
             // userType값 default 는 2 (사업자명의 인증서)
             // identitiy 값은 default로 (사업자 번호)
-            $data10 = array(
-                'loginMethod' => 'EASY',
-                'loginOrgCd' => 'kakao',
-                'resNm' => $userName,
-                'resNo' => '9403281233817',
-                'mobileNo' => $phoneNo,
-                'stepMode' => 'nostep',
-                'bizNo' => $identity,
-                'cookieData' => $cookie
+            $data2_auth = array(
+                'organization' => "0001",
+                'userType' => "0",
+                'manageNo' => $manageNo,
+                'identity' => $userIdentity_r,
+                'year' => $year,
+                'userName' => $userName,
+                'loginType' => "5",
+                'loginTypeLevel' => "1",
+                'loginUserName' => $userName,
+                'phoneNo' => $phoneNo,
+                "id" => $id,
+                'simpleAuth' => "1",
+                'is2Way' => true,
+                'twoWayInfo' => array (
+                'jobIndex' => $job,
+                'threadIndex' => $thread,
+                'jti' => $jti,
+                'twoWayTimestamp' => $two,
+                )
+            
+    
+    );
 
-            );
+        
+        
+ 
         
         //send_api($END_POINT10,$data10);
+        sleep(30);
 
-        if($get_data1['result']['code'] == "CF-03002")
+        if($get_data['result']['code'] == "CF-03002")
         {
+
+
            
-           
+            $get_data_auth = send_api($END_POINT11,$data11_auth);
+            sleep(1);
+            send_api($END_POINT2,$data2_auth);
 
-            
-            sleep(3);
+            echo "<h1>second</h1>";
 
-            echo "<p id='api_json'>";
-            echo "second";
-            
-            echo "</p>";
-            $is_true = true;
-            $cnt = 0;
 
-        
 
-            sleep(30);
-
-            //$get_data1_auth = send_api($END_POINT11,$data11_auth); 
-            // $get_data4 = send_api($END_POINT4,$data4_auth);
-
-                while($is_true)
+                while(false)
             {
 
                 echo "while";
