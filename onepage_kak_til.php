@@ -14,7 +14,7 @@ $apiHost   = "https://api.tilko.net/";
 $apiKey    = "ee6e15f2ccab4348b445945c6591959d";
 
 
-// AES 암호화 함수 //AES
+// AES 암호화 함수
 function aesEncrypt($aesKey, $aesIv, $plainText) {
     $ret = openssl_encrypt($plainText, 'AES-128-CBC', $aesKey, OPENSSL_RAW_DATA, $aesIv);	//default padding은 PKCS7 padding
     return base64_encode($ret);
@@ -22,7 +22,6 @@ function aesEncrypt($aesKey, $aesIv, $plainText) {
 
 
 // RSA 공개키(Public Key) 조회 함수
-//public key get 
 function getPublicKey($apiKey) {
     global $apiHost;
 
@@ -54,7 +53,7 @@ $rsaPublicKey   = getPublicKey($apiKey);
 
 
 // AES Secret Key 및 IV 생성
-$aesKey     = random_bytes(16);  //random IV variable 
+$aesKey     = random_bytes(16);
 $aesIv      = str_repeat(chr(0), 16);
 
 
@@ -67,8 +66,6 @@ $aesCipheredKey = $rsa->encrypt($aesKey);
 
 
 // API URL 설정(정부24 간편인증 주민등록증진위여부 조회: https://tilko.net/Help/Api/POST-api-apiVersion-GovSimpleAuth-AA090UserJuminCheckResApp)
-//this is the acutall API call 
-
 $url        = $apiHost . "api/v2.0/KcomwelSimpleAuth/SimpleAuthRequest";
 
 
@@ -129,10 +126,8 @@ curl_close($curl);
 print($response);
 
 //2차 api  전송
-//api call -> 2nd authentication
-//2nd auth credtentials -> ID , Transition number 
 
-sleep(30); //
+sleep(30);
 
 echo "<h1>start from here </h1>";
 
@@ -146,15 +141,10 @@ $txId = $response_data["ResultData"]["TxId"];
 $reqTxId = $response_data["ResultData"]["ReqTxId"];
 $privateAuthType = $response_data["ResultData"]["PrivateAuthType"];
 
-
-
 $errorCode = $response_data["ErrorCode"];
 //sleep(30);
 
-
-// all of the one above was preperation 
-// this is the acutall data to get 
-$url2        = $apiHost . "api/v2.0/KcomwelSimpleAuth/SelectGeunrojaGyIryeok";  //url
+$url2        = $apiHost . "api/v2.0/KcomwelSimpleAuth/SelectGeunrojaGyIryeok";
 $bodies     = array(
     
     "UserGroupFlag"             => "1",

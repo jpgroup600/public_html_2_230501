@@ -1,7 +1,3 @@
-<!-- |Great! How can I assist you with your PHP coding needs?
-| -->
-
-
 <!doctype html>
 <html lang="en">
 <head>

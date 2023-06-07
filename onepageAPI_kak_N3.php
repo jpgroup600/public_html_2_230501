@@ -53,7 +53,7 @@ function return_first_word($userIdentity) {  //19년생 20년생 따라 나뉘�
     // Return the decoded JSON array
     return $decoded_json;
   }
- 
+
   function send_api($url,$Ar_data) //API 전송 함수 
   {
     global $token;

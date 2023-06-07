@@ -1,5 +1,6 @@
 {
     "require": {
-        "guzzlehttp/guzzle": "^7.5"
+        "guzzlehttp/guzzle": "^7.5",
+        "phpseclib/phpseclib": "1.0.19"
     }
 }
